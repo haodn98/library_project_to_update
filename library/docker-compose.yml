@@ -1,0 +1,23 @@
+version: "3.10"
+
+services:
+  sprint18:
+    build: .
+    command: bash -c "python /library/manage.py migrate && python /library/manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/library
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    container_name: sprint18_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+
+volumes:
+  postgres_data:
